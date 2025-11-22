@@ -29,19 +29,48 @@ jobs:
         with:
           static_site_generator: next
 
+      - name: Check Next.js config 🔍
+        run: |
+          echo "Checking Next.js configuration files:"
+          ls -la next.config.* || echo "No next.config files found"
+          if [ -f "next.config.ts" ]; then
+            echo "next.config.ts contents:"
+            cat next.config.ts
+          fi
+          if [ -f "next.config.js" ]; then
+            echo "next.config.js contents:"
+            cat next.config.js
+          fi
+
       - name: Build with Next.js 🏗️
         run: npm run build
+        env:
+          NEXT_PRIVATE_STANDALONE: false
 
       - name: Verify build output 📋
         run: |
-          if [ ! -d "./out" ]; then
-            echo "Error: ./out directory does not exist"
+          echo "Checking for output directory..."
+          if [ -d "./out" ]; then
+            echo "✓ ./out directory exists"
+            echo "Contents:"
+            ls -la ./out | head -20
+          elif [ -d "./.next" ]; then
+            echo "⚠ ./out directory does not exist, but .next directory found"
+            echo "This suggests the export step didn't run"
+            echo "Checking .next directory:"
+            ls -la .next | head -10
+            echo ""
+            echo "Checking if export was attempted:"
+            if [ -f ".next/export-marker.json" ]; then
+              cat .next/export-marker.json
+            fi
+            exit 1
+          else
+            echo "Error: Neither ./out nor ./.next directory found"
             echo "Build output contents:"
             ls -la
             exit 1
           fi
-          echo "Build output verified:"
-          ls -la ./out | head -20
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3
