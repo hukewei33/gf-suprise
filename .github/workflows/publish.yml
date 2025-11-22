@@ -30,7 +30,18 @@ jobs:
           static_site_generator: next
 
       - name: Build with Next.js 🏗️
-        run: npx next build
+        run: npm run build
+
+      - name: Verify build output 📋
+        run: |
+          if [ ! -d "./out" ]; then
+            echo "Error: ./out directory does not exist"
+            echo "Build output contents:"
+            ls -la
+            exit 1
+          fi
+          echo "Build output verified:"
+          ls -la ./out | head -20
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3
