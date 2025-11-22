@@ -2,7 +2,7 @@
   "name": "kenny-sierra-trip",
   "version": "0.1.0",
 
-"homepage": "http://hukewei3.github.io/kenny-sierra-trip",
+"homepage": "https://hukewei33.github.io/gf-suprise",
 
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "predeploy": "npm run build",
-"deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d .next/build"
   },
   "dependencies": {
     "next": "16.0.3",
