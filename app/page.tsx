@@ -117,8 +117,8 @@ const tripOptions: TripOption[] = [
         url: 'https://www.nantucket-ma.gov/DocumentCenter/View/1640/Sconset-Bluff-Walk-Map'
       },
       {
-        name: 'Endeavor Sunset Sailing Cruise',
-        description: '',
+        name: 'Beach Picnic',
+        description: 'Bring your own food and drinks! Much on local eats and Kenny specials!',
         url: 'https://www.endeavorsailing.com'
       }
     ],
