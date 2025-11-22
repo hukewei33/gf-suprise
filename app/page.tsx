@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 interface TripOption {
@@ -141,11 +141,125 @@ const tripOptions: TripOption[] = [
   }
 ];
 
-function TripCard({ trip }: { trip: TripOption }) {
+const statusMessages = [
+  "🤖 INITIALIZING AI BOOKING AGENT...",
+  "⚠️ BUYING 73 PLANE TICKETS...",
+  "💳 AUTHORIZING $54,345 PAYMENT TO BOOKING.COM...",
+  "🏨 MAKING 23 HOTEL RESERVATIONS...",
+  "🚁 BOOKING HELICOPTER TOURS...",
+  "💰 PROCESSING $12,847 TRANSACTION...",
+  "📱 SUBSCRIBING TO 15 TRAVEL NEWSLETTERS...",
+  "✈️ PURCHASING FIRST CLASS UPGRADES...",
+  "🎫 RESERVING VIP EXPERIENCES...",
+  "⚡ AI AGENT GOING ROGUE...",
+  "🔥 MAXING OUT CREDIT CARDS...",
+  "🌍 BOOKING WORLD TOUR PACKAGE...",
+  "💸 TRANSFERRING $89,432 TO TRAVEL AGENCY...",
+  "🎰 PURCHASING CASINO CHIPS...",
+  "🍾 RESERVING CHAMPAGNE BRUNCHES..."
+];
+
+interface PrankModalProps {
+  isOpen: boolean;
+  tripName: string;
+  onClose: () => void;
+}
+
+function PrankModal({ isOpen, tripName, onClose }: PrankModalProps) {
+  const [progress, setProgress] = useState(0);
+  const [currentStatus, setCurrentStatus] = useState(statusMessages[0]);
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setProgress(0);
+      setIsComplete(false);
+      setCurrentStatus(statusMessages[0]);
+      return;
+    }
+
+    // Progress bar animation
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(progressInterval);
+          setTimeout(() => setIsComplete(true), 500);
+          return 100;
+        }
+        return prev + Math.random() * 15;
+      });
+    }, 400);
+
+    // Status message rotation
+    const statusInterval = setInterval(() => {
+      setCurrentStatus(statusMessages[Math.floor(Math.random() * statusMessages.length)]);
+    }, 800);
+
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(statusInterval);
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        {!isComplete ? (
+          <>
+            <h2 className="modal-title">
+              ⚡ BOOKING {tripName} ⚡
+            </h2>
+            
+            <div className="modal-status">
+              <p className="status-text">{currentStatus}</p>
+            </div>
+
+            <div className="progress-container">
+              <div className="progress-bar" style={{ width: `${Math.min(progress, 100)}%` }} />
+            </div>
+
+            <p className="progress-percent">{Math.min(Math.floor(progress), 100)}%</p>
+
+            <div className="warning-box">
+              <p>⚠️ WARNING: AI AGENT DETECTED ⚠️</p>
+              <p className="warning-subtext">UNAUTHORIZED TRANSACTIONS IN PROGRESS</p>
+            </div>
+          </>
+        ) : (
+          <div className="reveal-content">
+            <h2 className="modal-title reveal-title">
+              🎮 JUST KIDDING! 🎮
+            </h2>
+            
+            <div className="reveal-text">
+              <p className="reveal-main">THIS IS JUST A</p>
+              <p className="reveal-highlight">✨ VIBE CODED APP ✨</p>
+              <p className="reveal-main">NO ACTUAL BOOKINGS WERE MADE!</p>
+            </div>
+
+            <div className="reveal-message">
+              <p>💬 TO ACTUALLY BOOK THIS TRIP:</p>
+              <p className="bug-kenny">👉 BUG KENNY 👈</p>
+              <p className="reveal-subtext">He&apos;s in charge of real reservations!</p>
+            </div>
+
+            <button className="modal-close-btn" onClick={onClose}>
+              CLOSE [ESC]
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function TripCard({ trip, isSelected, onSelect }: { trip: TripOption; isSelected: boolean; onSelect: () => void }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="trip-card">
+    <div className={`trip-card ${isSelected ? 'selected' : ''}`}>
       {/* Trip Image */}
       <div className="trip-image-placeholder">
         <div className="pixel-border">
@@ -164,6 +278,14 @@ function TripCard({ trip }: { trip: TripOption }) {
       {/* Title */}
       <h2 className="trip-title">{trip.title}</h2>
       <p className="trip-subtitle">{trip.subtitle}</p>
+
+      {/* Select Button */}
+      <button
+        className="select-button"
+        onClick={onSelect}
+      >
+        ⚡ SELECT THIS TRIP ⚡
+      </button>
 
       {/* Accordion Toggle */}
       <button
@@ -229,6 +351,17 @@ function TripCard({ trip }: { trip: TripOption }) {
 }
 
 export default function Home() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
+
+  const handlePressStart = () => {
+    if (selectedTripId) {
+      setModalOpen(true);
+    }
+  };
+
+  const selectedTrip = tripOptions.find(trip => trip.id === selectedTripId);
+
   return (
     <div className="game-container">
       {/* Header */}
@@ -243,14 +376,32 @@ export default function Home() {
       {/* Trip Options Grid */}
       <main className="trip-grid">
         {tripOptions.map((trip) => (
-          <TripCard key={trip.id} trip={trip} />
+          <TripCard 
+            key={trip.id} 
+            trip={trip}
+            isSelected={selectedTripId === trip.id}
+            onSelect={() => setSelectedTripId(trip.id)}
+          />
         ))}
       </main>
 
       {/* Footer */}
       <footer className="game-footer">
-        <p>PRESS START TO BEGIN YOUR JOURNEY</p>
+        <button 
+          className={`start-button ${selectedTripId ? 'active' : 'inactive'}`}
+          onClick={handlePressStart}
+          disabled={!selectedTripId}
+        >
+          {selectedTripId ? '▶ PRESS START TO BEGIN YOUR JOURNEY' : '⚠ SELECT A TRIP FIRST'}
+        </button>
       </footer>
+
+      {/* Prank Modal */}
+      <PrankModal 
+        isOpen={modalOpen}
+        tripName={selectedTrip?.title || ''}
+        onClose={() => setModalOpen(false)}
+      />
     </div>
   );
 }
