@@ -1,26 +1,400 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --arcade-pink: #ff00ff;
+  --arcade-cyan: #00ffff;
+  --arcade-yellow: #ffff00;
+  --arcade-orange: #ff6600;
+  --arcade-green: #00ff00;
+  --arcade-purple: #9d00ff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-press-start);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(180deg, #1a0033 0%, #000000 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-press-start), cursive;
+  min-height: 100vh;
+  overflow-x: hidden;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Scanline Effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Main Container */
+.game-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+.game-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 1rem;
+  border: 4px solid var(--arcade-cyan);
+  background: rgba(0, 255, 255, 0.05);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.5),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+  position: relative;
+}
+
+.game-header::before,
+.game-header::after {
+  content: '★';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  color: var(--arcade-yellow);
+  animation: pulse 1s infinite alternate;
+}
+
+.game-header::before {
+  left: 1rem;
+}
+
+.game-header::after {
+  right: 1rem;
+}
+
+.game-title {
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
+  color: var(--arcade-cyan);
+  text-shadow: 
+    3px 3px 0 var(--arcade-pink),
+    6px 6px 0 var(--arcade-purple);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.title-line {
+  display: block;
+}
+
+.game-subtitle {
+  font-size: clamp(0.6rem, 2vw, 1rem);
+  color: var(--arcade-yellow);
+  letter-spacing: 0.3em;
+  animation: blink 1.5s infinite;
+}
+
+/* Trip Grid */
+.trip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .trip-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Trip Card */
+.trip-card {
+  border: 4px solid var(--arcade-pink);
+  background: linear-gradient(180deg, #1a001a 0%, #000000 100%);
+  padding: 1.5rem;
+  box-shadow: 
+    0 0 20px rgba(255, 0, 255, 0.6),
+    inset 0 0 20px rgba(255, 0, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.trip-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 0 30px rgba(255, 0, 255, 0.9),
+    inset 0 0 30px rgba(255, 0, 255, 0.2);
+  border-color: var(--arcade-cyan);
+}
+
+.trip-card:nth-child(2) {
+  border-color: var(--arcade-orange);
+  box-shadow: 
+    0 0 20px rgba(255, 102, 0, 0.6),
+    inset 0 0 20px rgba(255, 102, 0, 0.1);
+}
+
+.trip-card:nth-child(2):hover {
+  box-shadow: 
+    0 0 30px rgba(255, 102, 0, 0.9),
+    inset 0 0 30px rgba(255, 102, 0, 0.2);
+  border-color: var(--arcade-yellow);
+}
+
+.trip-card:nth-child(3) {
+  border-color: var(--arcade-green);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 0, 0.6),
+    inset 0 0 20px rgba(0, 255, 0, 0.1);
+}
+
+.trip-card:nth-child(3):hover {
+  box-shadow: 
+    0 0 30px rgba(0, 255, 0, 0.9),
+    inset 0 0 30px rgba(0, 255, 0, 0.2);
+  border-color: var(--arcade-cyan);
+}
+
+/* Image Placeholder */
+.trip-image-placeholder {
+  margin-bottom: 1.5rem;
+}
+
+.pixel-border {
+  border: 3px solid var(--arcade-cyan);
+  padding: 0.5rem;
+  background: #000;
+}
+
+.image-content {
+  aspect-ratio: 16 / 9;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      #1a1a1a 0px,
+      #1a1a1a 10px,
+      #0d0d0d 10px,
+      #0d0d0d 20px
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--arcade-yellow);
+  font-size: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.trip-image {
+  image-rendering: auto;
+  filter: contrast(1.1) saturate(1.2);
+  transition: transform 0.3s ease;
+}
+
+.trip-card:hover .trip-image {
+  transform: scale(1.05);
+}
+
+/* Trip Title */
+.trip-title {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: var(--arcade-yellow);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.2em;
+}
+
+.trip-subtitle {
+  font-size: clamp(0.5rem, 1vw, 0.7rem);
+  color: var(--arcade-cyan);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Accordion Toggle Button */
+.accordion-toggle {
+  width: 100%;
+  padding: 1rem;
+  background: var(--arcade-purple);
+  border: 3px solid var(--arcade-pink);
+  color: #fff;
+  font-family: var(--font-press-start), cursive;
+  font-size: clamp(0.5rem, 1.5vw, 0.8rem);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 0 #660066;
+  margin-bottom: 1rem;
+}
+
+.accordion-toggle:hover {
+  background: var(--arcade-pink);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #660066;
+}
+
+.accordion-toggle:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #660066;
+}
+
+/* Accordion Content */
+.accordion-content {
+  border-top: 2px solid var(--arcade-cyan);
+  padding-top: 1rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-section {
+  margin-bottom: 1.5rem;
+}
+
+.detail-header {
+  font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+  color: var(--arcade-yellow);
+  margin-bottom: 0.8rem;
+  border-bottom: 2px solid var(--arcade-purple);
+  padding-bottom: 0.5rem;
+}
+
+.detail-text {
+  font-size: clamp(0.5rem, 1vw, 0.65rem);
+  color: var(--foreground);
+  line-height: 1.8;
+  margin-bottom: 0.5rem;
+}
+
+.detail-item {
+  margin-bottom: 1rem;
+}
+
+.detail-link {
+  font-size: clamp(0.5rem, 1vw, 0.65rem);
+  color: var(--arcade-cyan);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 0.3rem;
+  transition: color 0.2s ease;
+}
+
+.detail-link:hover {
+  color: var(--arcade-pink);
+  text-shadow: 0 0 10px var(--arcade-pink);
+}
+
+.detail-desc {
+  font-size: clamp(0.45rem, 0.9vw, 0.6rem);
+  color: #aaa;
+  line-height: 1.6;
+  margin-left: 1rem;
+}
+
+/* Footer */
+.game-footer {
+  text-align: center;
+  padding: 2rem;
+  border: 3px solid var(--arcade-green);
+  background: rgba(0, 255, 0, 0.05);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.game-footer p {
+  font-size: clamp(0.6rem, 1.5vw, 1rem);
+  color: var(--arcade-green);
+  animation: blink 2s infinite;
+}
+
+/* Animations */
+@keyframes glow {
+  from {
+    text-shadow: 
+      3px 3px 0 var(--arcade-pink),
+      6px 6px 0 var(--arcade-purple),
+      0 0 10px rgba(0, 255, 255, 0.5);
+  }
+  to {
+    text-shadow: 
+      3px 3px 0 var(--arcade-pink),
+      6px 6px 0 var(--arcade-purple),
+      0 0 20px rgba(0, 255, 255, 1);
+  }
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: translateY(-50%) scale(1);
+  }
+  to {
+    transform: translateY(-50%) scale(1.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .game-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .game-header {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .trip-card {
+    padding: 1rem;
+  }
+  
+  .detail-desc {
+    margin-left: 0.5rem;
+  }
 }
