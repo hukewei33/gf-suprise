@@ -10,7 +10,7 @@ interface TripOption {
   location: string;
   transportation: string;
   image: string;
-  highlights: Array<{ name: string; url: string; description?: string }>;
+  highlights: Array<{ name: string; url?: string; description?: string }>;
   eats: Array<{ name: string; description: string; url?: string }>;
   accommodation: { name: string; url: string };
 }
@@ -18,38 +18,38 @@ interface TripOption {
 const tripOptions: TripOption[] = [
   {
     id: 'berkshires',
-    title: 'BERKSHIRES',
+    title: 'BERKSHIRES, WESTERN MASSACHUSETTS',
     subtitle: 'Art, Mountains & Maple Magic',
     location: 'Berkshires, Western Massachusetts',
     transportation: 'Drive from NYC — 2.5–3.5 hours',
     image: '/berksire.jpg',
     highlights: [
       {
-        name: 'MASS MoCA',
-        description: 'Contemporary Art Museum',
-        url: 'https://massmoca.org'
+        name: 'Jimmy Peak Mountain Resort',
+        description: 'Summer time mountain activities with a Mountain adeveture park!',
+        url:' https://www.jiminypeak.com/summer/attractions/mountain-adventure-park/'
       },
       {
-        name: 'Monument Mountain Hike',
-        description: 'Moderate, iconic views',
-        url: 'https://www.thetrustees.org/place/monument-mountain/'
+        name: 'Monunt Greylock state reservation',
+        description: 'Hike to the top of the tallest mountain in Massachusetts!',
+        url:"https://www.mass.gov/locations/mount-greylock-state-reservation"
       },
       {
-        name: 'Bash Bish Falls',
-        description: 'Historic 2-tier waterfall',
-        url: 'https://www.mass.gov/locations/bash-bish-falls-state-park'
+        name: 'New England towns',
+        description: 'Explore the charming towns of New England like Stockbridge and Lenox!',
+        url:"https://www.google.com/maps/place/Stockbridge,+MA/@42.2863598,-73.4722655,10.27z/data=!4m6!3m5!1s0x89e75c5740e0fd99:0x484472c0b187fd09!8m2!3d42.2875874!4d-73.3203862!16zL20vMHR5ajk?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D"
       }
     ],
     eats: [
       {
         name: 'Farm-to-Table New England Cuisine',
-        description: 'seasonal veggies, heirloom pork, stone-milled grains',
-        url: 'https://berkshires.org/eat-and-drink/farm-to-table/'
+        description: 'seasonal veggies for Sierra, heirloom pork for Kenny',
+        url:'https://visithampshirecounty.com/places/category/eat/restaurants/farm-to-table'
       },
       {
         name: 'Artisanal Bakeries & Coffee Roasters',
         description: 'fresh pastries, local roasts, maple specialties',
-        url: 'https://www.tripadvisor.com/Restaurants-g41667-zfg9901-Berkshires_Massachusetts.html'
+        url:"https://www.tripadvisor.com/Restaurants-g41639-c8-Lenox_Massachusetts.html"
       }
     ],
     accommodation: {
@@ -59,7 +59,7 @@ const tripOptions: TripOption[] = [
   },
   {
     id: 'highlands',
-    title: 'HIGHLANDS',
+    title: 'HIGHLANDS, WESTERN NORTH CAROLINA',
     subtitle: 'Waterfalls, Whisky, and Whispering Pines',
     location: 'Highlands & Cashiers, Western North Carolina',
     transportation: 'Drive from Charlotte — 2.5–3 hours',
@@ -68,24 +68,24 @@ const tripOptions: TripOption[] = [
       {
         name: 'Dry Falls',
         description: 'Walk Behind a Waterfall',
-        url: 'https://www.fs.usda.gov/recarea/nfsnc/recarea/?recid=48974'
+        url: 'https://www.romanticasheville.com/dry_falls.html'
       },
       {
         name: 'Whiteside Mountain Hike',
         description: 'Epic cliffside views',
-        url: 'https://www.fs.usda.gov/recarea/nfsnc/recarea/?recid=48978'
+        url: 'https://maps.app.goo.gl/o7eXaYpX8WAmzMqA9'
       },
       {
         name: 'Lake Glenville Boat Ride',
         description: 'Sunset Cruise',
-        url: 'https://discoverjacksonnc.com/attractions/lakes/lake-glenville/'
+        url: 'https://www.worldclasswaterfalls.com/cruises'
       }
     ],
     eats: [
       {
         name: 'Southern Appalachian Mountain Cuisine',
         description: 'trout dishes, cast-iron cornbread, mountain vegetables',
-        url: 'https://discoverjacksonnc.com/dining/'
+        url: 'https://www.discoverjacksonnc.com/food-drink/'
       },
       {
         name: 'Rustic Brewpub & Smokehouse Plates',
@@ -94,13 +94,13 @@ const tripOptions: TripOption[] = [
       }
     ],
     accommodation: {
-      name: 'Old Edwards Inn & Spa',
-      url: 'https://www.oldedwardshospitality.com/old-edwards-inn-spa'
+      name: 'Highlands Mountain House',
+      url: 'https://www.highlandermountainhouse.com/'
     }
   },
   {
     id: 'nantucket',
-    title: 'NANTUCKET',
+    title: 'NANTUCKET, MASSACHUSETTS',
     subtitle: 'Bikes, Beaches & Barefoot Luxury',
     location: 'Nantucket Island, Massachusetts',
     transportation: 'Ferry from Hyannis (1 hr fast ferry) or New Bedford (1 hr Seastreak)',
@@ -114,24 +114,24 @@ const tripOptions: TripOption[] = [
       {
         name: 'Sconset Bluff Walk',
         description: 'Coastal walking path',
-        url: 'https://www.nantucket-ma.gov/DocumentCenter/View/1640/Sconset-Bluff-Walk-Map'
+        url: 'https://www.nantucket-ma.gov/facilities/facility/details/sconset-bluff-walk-25'
       },
       {
         name: 'Beach Picnic',
         description: 'Bring your own food and drinks! Much on local eats and Kenny specials!',
-        url: 'https://www.endeavorsailing.com'
+        url: 'https://nantucket.net/beaches/'
       }
     ],
     eats: [
       {
         name: 'New England Seafood Classics',
-        description: 'lobster rolls, clam chowder, day-boat scallops',
-        url: 'https://www.nantucketchamber.org/dining.html'
+        description: 'fresh seafood from the local waters',
+        url:'https://www.tripadvisor.com/Restaurant_Review-g29527-d3190265-Reviews-Cru-Nantucket_Massachusetts.html'
       },
       {
-        name: 'Island Bakeries & Raw Bar Culture',
-        description: 'fresh oysters, baked goods, coastal café fare',
-        url: 'https://www.nantucket-ma.gov/Directory.aspx?did=42'
+        name: 'Island Bakeries and cafés',
+        description: 'baked goods, coastal café fare',
+        url: 'https://nantucket.net/bakeries-gourmet-markets/'
       }
     ],
     accommodation: {
